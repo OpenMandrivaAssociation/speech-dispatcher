@@ -22,7 +22,7 @@
 
 Name:			speech-dispatcher
 Version:		0.6.7
-Release:		%mkrel 1
+Release:		%mkrel 2
 Summary:		Speech Dispatcher provides a device independent layer for speech synthesis
 Group:			System/Libraries
 License:		GPLv2
@@ -156,7 +156,7 @@ with Speech Dispatcher.
 cp -p %SOURCE4 .
 
 %build
-%configure \
+%configure2_5x \
 	--disable-static \
 %if %build_alsa
 	--with-alsa \
@@ -183,7 +183,7 @@ cp -p %SOURCE4 .
 
 %install
 rm -rf %buildroot
-%makeinstall
+%makeinstall_std
 
 # remove duplicates with /etc conf files 
 rm -rf %buildroot%_datadir/%name
