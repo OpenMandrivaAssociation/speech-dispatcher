@@ -34,6 +34,8 @@ Source2:		speech-dispatcher.logrotate
 Source3:		speech-dispatcherd.default
 Source4:		speech-dispatcher-user-pulse.example
 Patch0:			fix-speech-dispatcher-cs-info-uninstall
+Patch1:			speech-dispatcher-0.6.7-fix-str-fmt.patch
+Patch2:			speech-dispatcher-0.6.7-destdir.patch
 Requires:		%libname = %version-%release
 %if %build_alsa
 BuildRequires:		libalsa-devel
@@ -153,6 +155,8 @@ with Speech Dispatcher.
 %prep
 %setup -q
 %patch0 -p0
+%patch1 -p0
+%patch2 -p0 -b .destdir
 cp -p %SOURCE4 .
 
 %build
