@@ -22,7 +22,7 @@
 
 Name:			speech-dispatcher
 Version:		0.6.7
-Release:		%mkrel 2
+Release:		%mkrel 3
 Summary:		Speech Dispatcher provides a device independent layer for speech synthesis
 Group:			System/Libraries
 License:		GPLv2
