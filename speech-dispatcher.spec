@@ -36,6 +36,7 @@ Source4:		speech-dispatcher-user-pulse.example
 Patch0:			fix-speech-dispatcher-cs-info-uninstall
 Patch1:			speech-dispatcher-0.6.7-fix-str-fmt.patch
 Patch2:			speech-dispatcher-0.6.7-destdir.patch
+Patch3:			speech-dispatcher-0.6.7-deb-mdv-fix-getline.patch
 Requires:		%libname = %version-%release
 %if %build_alsa
 BuildRequires:		libalsa-devel
@@ -157,6 +158,7 @@ with Speech Dispatcher.
 %patch0 -p0
 %patch1 -p0
 %patch2 -p0 -b .destdir
+%patch3 -p1 -b .getline
 cp -p %SOURCE4 .
 
 %build
