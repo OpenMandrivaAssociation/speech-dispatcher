@@ -11,10 +11,10 @@
 
 
 Name:			speech-dispatcher
-Version:		0.7.1
-Release:		%mkrel 1
 Summary:		Speech Dispatcher provides a device independent layer for speech synthesis
 Group:			System/Libraries
+Version:		0.7.1
+Release:		%mkrel 1
 License:		GPLv2
 URL:			http://www.freebsoft.org/speechd
 Source0:		http://www.freebsoft.org/pub/projects/speechd/%name-%version.tar.gz
@@ -89,28 +89,27 @@ people to work with computer and Internet based on free software.
 
 #--------------------------------------------------------------------------
 
-%package -n		%libname
+%package -n %libname
 Summary:		Shared libraries for %name
 Group:			System/Libraries
 
 %description -n		%libname
 This package provides the shared libraries for Speech Dispatcher.
 
-%files -n		%libname
+%files -n %libname
 %defattr(-,root,root,-)
-%doc COPYING ChangeLog
 %_libdir/libspeechd.so.%{major}*
 
 #--------------------------------------------------------------------------
 
-%package -n		%develname
+%package -n %develname
 Summary:		Development files for %name
 Group:			Development/Other
 Requires:		%name = %version-%release
 Provides:		%name-devel = %version-%release
 Provides:		lib%name-devel = %version-%release
 
-%description -n 	%develname
+%description -n %develname
 This package contains development files for %name.
 
 %files -n		%develname
@@ -123,7 +122,7 @@ This package contains development files for %name.
 
 #--------------------------------------------------------------------------
 
-%package -n 		python-%shortname
+%package -n python-%shortname
 Summary:		A Python library for communication with Speech Dispatcher
 Group:			System/Libraries
 Requires:		%name = %version-%release
@@ -133,9 +132,9 @@ Requires:		python
 This package provides a Python library for communication 
 with Speech Dispatcher.
 
-%files -n		python-%shortname
-%defattr(-,root,root,-)
+%files -n python-%shortname
 %doc ChangeLog
+%defattr(-,root,root,-)
 %_bindir/spd-conf
 %python_sitelib/speechd*
 %_datadir/sounds/%name/test.wav
@@ -148,6 +147,9 @@ with Speech Dispatcher.
 cp -p %SOURCE4 .
 
 %build
+%ifarch x86_64
+export am_cv_python_pyexecdir=%python_sitelib
+%endif
 %configure2_5x \
 	LDFLAGS=' -Wl,--as-needed -Wl,-z,relro -Wl,-O1 -Wl,--build-id' \
 	--disable-static \
