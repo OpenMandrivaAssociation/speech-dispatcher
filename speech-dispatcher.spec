@@ -17,7 +17,7 @@ Summary:		Speech Dispatcher provides a device independent layer for speech synth
 Group:			System/Libraries
 License:		GPLv2
 URL:			http://www.freebsoft.org/speechd
-Source0:		http://www.freebsoft.org/pub/projects/speechd/%name-%version.tar.gz
+Source0:		http://www.freebsoft.org/pub/projects/speechd/%name-%version.tar.bz2
 # modified Fedora init script 
 Source1:		speech-dispatcherd.init.mdv
 Source2:		speech-dispatcher.logrotate
