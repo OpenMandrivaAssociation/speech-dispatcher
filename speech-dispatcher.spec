@@ -3,26 +3,16 @@
 %define libname		%mklibname %shortname %major
 %define develname	%mklibname %shortname -d
 
-%define build_alsa	1
-%define build_pulse	1
-%define build_nas	1
-%define build_espeak	1
+%bcond_without alsa
+%bcond_without pulse
+%bcond_without nas
+%bcond_without espeak
+%bcond_without libao
 
-%{?_without_alsa: %{expand: %%global build_alsa 0}}
-%{?_with_alsa: %{expand: %%global build_alsa 1}}
-
-%{?_without_pulse: %{expand: %%global build_pulse 0}}
-%{?_with_pulse: %{expand: %%global build_pulse 1}}
-
-%{?_without_nas: %{expand: %%global build_nas 0}}
-%{?_with_nas: %{expand: %%global build_nas 1}}
-
-%{?_without_espeak: %{expand: %%global build_espeak 0}}
-%{?_with_espeak: %{expand: %%global build_espeak 1}}
 
 Name:			speech-dispatcher
-Version:		0.6.7
-Release:		%mkrel 3
+Version:		0.7.1
+Release:		%mkrel 1
 Summary:		Speech Dispatcher provides a device independent layer for speech synthesis
 Group:			System/Libraries
 License:		GPLv2
@@ -33,27 +23,27 @@ Source1:		speech-dispatcherd.init.mdv
 Source2:		speech-dispatcher.logrotate
 Source3:		speech-dispatcherd.default
 Source4:		speech-dispatcher-user-pulse.example
-Patch0:			fix-speech-dispatcher-cs-info-uninstall
-Patch1:			speech-dispatcher-0.6.7-fix-str-fmt.patch
-Patch2:			speech-dispatcher-0.6.7-destdir.patch
-Patch3:			speech-dispatcher-0.6.7-deb-mdv-fix-getline.patch
-Requires:		%libname = %version-%release
-%if %build_alsa
+Patch1:			speech-dispatcher-0.7.1-fix-str-fmt.patch
+BuildRoot:		%_tmppath/%{name}-%{version}-%{release}-buildroot
+%if %{with alsa}
 BuildRequires:		libalsa-devel
 %endif
-%if %build_pulse
+%if %{with pulse}
 BuildRequires:		pulseaudio-devel
 %endif
-%if %build_nas
+%if %{with nas}
 BuildRequires:		libnas-devel
 %endif
-%if %build_espeak
+%if %{with espeak}
 BuildRequires:		libespeak-devel
+%endif
+%if %{with libao}
+BuildRequires:		libao-devel
 %endif
 BuildRequires:		libdotconf-devel
 BuildRequires:		python-devel
 BuildRequires:		texinfo
-Buildroot:		%_tmppath/%name-%version-buildroot
+Requires:		%libname = %version-%release
 
 %description
 This is the Speech Dispatcher project (speech-dispatcher). It is a part of the
@@ -91,7 +81,6 @@ people to work with computer and Internet based on free software.
 %config(noreplace) %_sysconfdir/%name/clients/*.conf
 %config(noreplace) %_sysconfdir/%name/modules/*.conf
 %config(noreplace) %_sysconfdir/default/speech-dispatcherd
-%_sysconfdir/%name
 %_libdir/%name-modules
 %_libdir/%name
 %_datadir/sounds/%name
@@ -155,34 +144,37 @@ with Speech Dispatcher.
 
 %prep
 %setup -q
-%patch0 -p0
 %patch1 -p0
-%patch2 -p0 -b .destdir
-%patch3 -p1 -b .getline
 cp -p %SOURCE4 .
 
 %build
 %configure2_5x \
+	LDFLAGS=' -Wl,--as-needed -Wl,-z,relro -Wl,-O1 -Wl,--build-id' \
 	--disable-static \
-%if %build_alsa
+%if %{with alsa}
 	--with-alsa \
 %else
 	--without-alsa \
 %endif
-%if %build_pulse
+%if %{with pulse}
 	--with-pulse \
 %else
 	--without-pulse \
 %endif
-%if %build_nas
+%if %{with nas}
 	--with-nas \
 %else
 	--without-nas \
 %endif
-%if %build_espeak
-	--with-espeak
+%if %{with espeak}
+	--with-espeak \
 %else
-	--without-espeak
+	--without-espeak \
+%endif
+%if %{with libao}
+	--with-libao
+%else
+	--without-libao
 %endif
 
 %make
