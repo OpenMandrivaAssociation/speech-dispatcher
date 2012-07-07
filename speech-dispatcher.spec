@@ -14,7 +14,7 @@ Name:			speech-dispatcher
 Summary:		Speech Dispatcher provides a device independent layer for speech synthesis
 Group:			System/Libraries
 Version:		0.7.1
-Release:		%mkrel 1
+Release:		2
 License:		GPLv2
 URL:			http://www.freebsoft.org/speechd
 Source0:		http://www.freebsoft.org/pub/projects/speechd/%name-%version.tar.gz
@@ -23,6 +23,7 @@ Source1:		speech-dispatcherd.init.mdv
 Source2:		speech-dispatcher.logrotate
 Source3:		speech-dispatcherd.default
 Source4:		speech-dispatcher-user-pulse.example
+Source10:		%name.rpmlintrc
 Patch1:			speech-dispatcher-0.7.1-fix-str-fmt.patch
 BuildRoot:		%_tmppath/%{name}-%{version}-%{release}-buildroot
 %if %{with alsa}
@@ -51,22 +52,14 @@ Free(b)soft project, which is intended to allow blind and visually impaired
 people to work with computer and Internet based on free software.
 
 %post
-%_install_info %name.info || :
-%_install_info spd-say.info || :
-%_install_info ssip.info || :
-%_install_info %name-cs.info || :
 %_post_service speech-dispatcherd || :
 
 %preun
-%_remove_install_info %name.info || :
-%_remove_install_info spd-say.info || :
-%_remove_install_info ssip.info || :
-%_remove_install_info %name-cs.info || :
 %_preun_service speech-dispatcherd || :
 
 %files
 %defattr(-,root,root,-)
-%doc AUTHORS NEWS README COPYING INSTALL TODO 
+%doc AUTHORS NEWS README COPYING INSTALL
 %doc ChangeLog speech-dispatcher-user-pulse.example
 %_bindir/cli*
 %_bindir/connection_recovery
@@ -116,9 +109,6 @@ This package contains development files for %name.
 %defattr(-,root,root)
 %_includedir/*
 %_libdir/lib*.so
-%_libdir/lib*.la
-%_libdir/speech-dispatcher/lib*.la
-%_libdir/speech-dispatcher/lib*.so
 
 #--------------------------------------------------------------------------
 
@@ -137,7 +127,6 @@ with Speech Dispatcher.
 %defattr(-,root,root,-)
 %_bindir/spd-conf
 %python_sitelib/speechd*
-%_datadir/sounds/%name/test.wav
 
 #--------------------------------------------------------------------------
 
