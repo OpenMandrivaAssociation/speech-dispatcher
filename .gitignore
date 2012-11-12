@@ -1,0 +1,6 @@
+speech-dispatcher-0.7.1.tar.gz
+speech-dispatcherd.default
+speech-dispatcherd.init.mdv
+speech-dispatcher.logrotate
+speech-dispatcher.rpmlintrc
+speech-dispatcher-user-pulse.example

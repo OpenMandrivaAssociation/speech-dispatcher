@@ -1,0 +1,7 @@
+sources:
+  "speech-dispatcher-0.7.1.tar.gz:"	be911de1ef334fa1708a7489f9dde51b499ab265
+  "speech-dispatcherd.default:"	4b34a9455abe3b9b57f272b79b3d0212dde48d42
+  "speech-dispatcherd.init.mdv:"	8f24ce5735ded91b399a9d6b0687a4f98e4ba4ac
+  "speech-dispatcher.logrotate:"	b88ed55fc0cba896c6572476cfe73eeb57796bfc
+  "speech-dispatcher.rpmlintrc:"	68d4fb0e2bb0734bc3ef52e7c3618b085f25482c
+  "speech-dispatcher-user-pulse.example:"	aea13c46b556742f79f530d3a988239cf1ddadab
