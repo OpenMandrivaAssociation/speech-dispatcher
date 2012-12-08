@@ -1,0 +1,11 @@
+daily
+compress
+rotate 5
+missingok
+sharedscripts
+
+/var/log/speech-dispatcher/*.log /var/log/speech-dispatcher/debug/* {
+	postrotate
+		service speech-dispatcherd restart >/dev/null
+	endscript
+}

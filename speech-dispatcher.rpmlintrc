@@ -1,0 +1,3 @@
+# Workaround for rpmlint being on crack and seeing things that aren't there
+addFilter("E: info-files-with-install-info-postin")
+addFilter("E: info-files-with-install-info-postun")

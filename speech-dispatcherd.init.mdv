@@ -1,0 +1,82 @@
+#!/bin/bash
+#
+# Mandriva speech-dispatcherd initscript
+#
+# TODO: make LSB Compliant
+### BEGIN INIT INFO
+# Provides: speech-dispatcherd
+# Default-Start: 2 3 4 5
+# Required-Start: $network
+# Required-Stop: $network
+# Short-Description: layer for speech analysis
+# Description: provides a high-level device independent \
+#              layer for speech synthesis.
+### END INIT INFO
+
+. /etc/rc.d/init.d/functions
+
+NAME=speech-dispatcherd
+DAEMON=/usr/bin/speech-dispatcher
+CONFIG=/etc/speech-dispatcher/speechd.conf
+PID_FILE=/var/run/speech-dispatcher.pid
+LOCK_FILE=/var/lock/subsys/$NAME
+SPD_DAEMON_START=0
+
+# Include speech-dispatcherd defaults if available
+if [ -f /etc/default/$NAME ] ; then
+	. /etc/default/$NAME
+fi
+
+
+start() {
+	if [ "$SPD_DAEMON_START" != "1" ]; then
+		gprintf "Not starting $NAME, disableb via /etc/default/$NAME\n"
+		exit 0
+	fi
+	gprintf "Starting $NAME: "
+	daemon $DAEMON 
+	RETVAL=$?
+	echo
+  	[ $RETVAL -eq 0 ] && touch $LOCK_FILE
+}
+
+stop() {
+	gprintf "Shutting down $NAME: "
+	killproc $DAEMON
+	RETVAL=$?
+	echo
+	if [ $RETVAL -eq 0 ]; then
+		rm -f $LOCK_FILE
+		rm -f $PID_FILE
+	fi
+}
+
+
+case "$1" in
+	start)
+		start
+		;;
+	stop)
+		stop
+		;;
+	restart)
+		stop
+		sleep 1
+		start
+		;;
+	reload)
+		restart
+		;;
+	status)
+		status $DAEMON
+		;;
+	condrestart|try-restart)
+		if [ -f $LOCK_FILE ]; then
+			restart
+		fi
+		;;
+	*)
+		gprintf "Usage: %s {start|stop|status|restart|condrestart|try-restart|reload}\n" "$0"
+esac
+
+exit $RETVAL

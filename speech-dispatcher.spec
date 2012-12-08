@@ -204,3 +204,39 @@ sed -i -e "210 s:AddModule:#AddModule:g" %buildroot%_sysconfdir/%name/speechd.co
 
 %clean
 rm -rf %buildroot
+
+
+%changelog
+* Sat Jul 07 2012 Bernhard Rosenkraenzer <bero@bero.eu> 0.7.1-2
++ Revision: 808448
+- Make it build in current environment
+
+* Sun Apr 10 2011 Zé <ze@mandriva.org> 0.7.1-1
++ Revision: 652299
+- export python path else isnt correctly detected in arch x86_64
+- arrange spec
+- 0.7.1
+- use bcond macro instead
+- add libao support
+- update patch1
+- drop patches:0,3 (fixed upstream)
+- drop patch2,different makefile
+- set ldflags (remove --no-undefined -Wl to avoid breaking build)
+- fix spec to avoid listing files twice
+
+* Wed Nov 18 2009 Jérôme Brenier <incubusss@mandriva.org> 0.6.7-3mdv2011.0
++ Revision: 467193
+- fix build (getline conflict) : patch from debian
+
+  + Thierry Vignaud <tv@mandriva.org>
+    - rebuild
+
+* Sun Jan 04 2009 Funda Wang <fwang@mandriva.org> 0.6.7-2mdv2009.1
++ Revision: 324152
+- fix strfmt
+- rebuild
+
+* Tue Nov 11 2008 Nicolas Lécureuil <nlecureuil@mandriva.com> 0.6.7-1mdv2009.1
++ Revision: 302106
+- import speech-dispatcher
+
