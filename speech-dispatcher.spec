@@ -1,7 +1,7 @@
-%define major		2
-%define shortname	speechd
-%define libname		%mklibname %shortname %major
-%define develname	%mklibname %shortname -d
+%define sname	speechd
+%define major	2
+%define libname	%mklibname %{sname} %{major}
+%define devname	%mklibname %{sname} -d
 
 %bcond_without alsa
 %bcond_without pulse
@@ -9,42 +9,40 @@
 %bcond_without espeak
 %bcond_without libao
 
-
-Name:			speech-dispatcher
-Summary:		Speech Dispatcher provides a device independent layer for speech synthesis
-Group:			System/Libraries
-Version:		0.7.1
-Release:		2
-License:		GPLv2
-URL:			http://www.freebsoft.org/speechd
-Source0:		http://www.freebsoft.org/pub/projects/speechd/%name-%version.tar.gz
+Summary:	Speech Dispatcher provides a device independent layer for speech synthesis
+Name:		speech-dispatcher
+Version:	0.7.1
+Release:	3
+Group:		System/Libraries
+License:	GPLv2
+Url:		http://www.freebsoft.org/speechd
+Source0:	http://www.freebsoft.org/pub/projects/speechd/%{name}-%{version}.tar.gz
 # modified Fedora init script 
-Source1:		speech-dispatcherd.init.mdv
-Source2:		speech-dispatcher.logrotate
-Source3:		speech-dispatcherd.default
-Source4:		speech-dispatcher-user-pulse.example
-Source10:		%name.rpmlintrc
-Patch1:			speech-dispatcher-0.7.1-fix-str-fmt.patch
-BuildRoot:		%_tmppath/%{name}-%{version}-%{release}-buildroot
+Source1:	speech-dispatcherd.init.mdv
+Source2:	speech-dispatcher.logrotate
+Source3:	speech-dispatcherd.default
+Source4:	speech-dispatcher-user-pulse.example
+Source10:	%{name}.rpmlintrc
+Patch1:		speech-dispatcher-0.7.1-fix-str-fmt.patch
+
+BuildRequires:	texinfo
+BuildRequires:	pkgconfig(dotconf)
+BuildRequires:	pkgconfig(python)
 %if %{with alsa}
-BuildRequires:		libalsa-devel
+BuildRequires:	pkgconfig(alsa)
 %endif
 %if %{with pulse}
-BuildRequires:		pulseaudio-devel
+BuildRequires:	pkgconfig(libpulse)
 %endif
 %if %{with nas}
-BuildRequires:		libnas-devel
+BuildRequires:	nas-devel
 %endif
 %if %{with espeak}
-BuildRequires:		libespeak-devel
+BuildRequires:	espeak-devel
 %endif
 %if %{with libao}
-BuildRequires:		libao-devel
+BuildRequires:	pkgconfig(ao)
 %endif
-BuildRequires:		libdotconf-devel
-BuildRequires:		python-devel
-BuildRequires:		texinfo
-Requires:		%libname = %version-%release
 
 %description
 This is the Speech Dispatcher project (speech-dispatcher). It is a part of the
@@ -58,77 +56,63 @@ people to work with computer and Internet based on free software.
 %_preun_service speech-dispatcherd || :
 
 %files
-%defattr(-,root,root,-)
 %doc AUTHORS NEWS README COPYING INSTALL
 %doc ChangeLog speech-dispatcher-user-pulse.example
-%_bindir/cli*
-%_bindir/connection_recovery
-%_bindir/spd-say
-%_bindir/spd_long_message
-%_bindir/spd_run_test
-%_bindir/spdsend
-%_bindir/%name
-%_initrddir/speech-dispatcherd
-%config %_sysconfdir/logrotate.d/%name
-%config(noreplace) %_sysconfdir/%name/speechd.conf
-%config(noreplace) %_sysconfdir/%name/clients/*.conf
-%config(noreplace) %_sysconfdir/%name/modules/*.conf
-%config(noreplace) %_sysconfdir/default/speech-dispatcherd
-%_libdir/%name-modules
-%_libdir/%name
-%_datadir/sounds/%name
-%_infodir/*
-%_logdir/%name
+%{_bindir}/cli*
+%{_bindir}/connection_recovery
+%{_bindir}/spd-say
+%{_bindir}/spd_long_message
+%{_bindir}/spd_run_test
+%{_bindir}/spdsend
+%{_bindir}/%{name}
+%{_initrddir}/speech-dispatcherd
+%config %{_sysconfdir}/logrotate.d/%{name}
+%config(noreplace) %{_sysconfdir}/%{name}/speechd.conf
+%config(noreplace) %{_sysconfdir}/%{name}/clients/*.conf
+%config(noreplace) %{_sysconfdir}/%{name}/modules/*.conf
+%config(noreplace) %{_sysconfdir}/default/speech-dispatcherd
+%{_libdir}/%{name}-modules
+%{_libdir}/%{name}
+%{_datadir}/sounds/%{name}
+%{_infodir}/*
+%{_logdir}/%{name}
 
-#--------------------------------------------------------------------------
+%package -n %{libname}
+Summary:	Shared libraries for %{name}
+Group:		System/Libraries
 
-%package -n %libname
-Summary:		Shared libraries for %name
-Group:			System/Libraries
-
-%description -n		%libname
+%description -n %{libname}
 This package provides the shared libraries for Speech Dispatcher.
 
-%files -n %libname
-%defattr(-,root,root,-)
-%_libdir/libspeechd.so.%{major}*
+%files -n %{libname}
+%{_libdir}/libspeechd.so.%{major}*
 
-#--------------------------------------------------------------------------
+%package -n %{devname}
+Summary:	Development files for %{name}
+Group:		Development/Other
+Requires:	%{name} = %{version}-%{release}
+Provides:	%{name}-devel = %{version}-%{release}
 
-%package -n %develname
-Summary:		Development files for %name
-Group:			Development/Other
-Requires:		%name = %version-%release
-Provides:		%name-devel = %version-%release
-Provides:		lib%name-devel = %version-%release
+%description -n %{devname}
+This package contains development files for %{name}.
 
-%description -n %develname
-This package contains development files for %name.
+%files -n %{devname}
+%{_includedir}/*
+%{_libdir}/lib*.so
 
-%files -n		%develname
-%defattr(-,root,root)
-%_includedir/*
-%_libdir/lib*.so
+%package -n python-%{sname}
+Summary:	A Python library for communication with Speech Dispatcher
+Group:		System/Libraries
+Requires:	%{name} = %{version}-%{release}
 
-#--------------------------------------------------------------------------
-
-%package -n python-%shortname
-Summary:		A Python library for communication with Speech Dispatcher
-Group:			System/Libraries
-Requires:		%name = %version-%release
-Requires:		python
-
-%description -n		python-%shortname
+%description -n python-%{sname}
 This package provides a Python library for communication 
 with Speech Dispatcher.
 
-%files -n python-%shortname
+%files -n python-%{sname}
 %doc ChangeLog
-%defattr(-,root,root,-)
-%_bindir/spd-conf
-%python_sitelib/speechd*
-
-#--------------------------------------------------------------------------
+%{_bindir}/spd-conf
+%{python_sitelib}/speechd*
 
 %prep
 %setup -q
@@ -137,7 +121,7 @@ cp -p %SOURCE4 .
 
 %build
 %ifarch x86_64
-export am_cv_python_pyexecdir=%python_sitelib
+export am_cv_python_pyexecdir=%{python_sitelib}
 %endif
 %configure2_5x \
 	LDFLAGS=' -Wl,--as-needed -Wl,-z,relro -Wl,-O1 -Wl,--build-id' \
@@ -171,72 +155,33 @@ export am_cv_python_pyexecdir=%python_sitelib
 %make
 
 %install
-rm -rf %buildroot
 %makeinstall_std
 
 # remove duplicates with /etc conf files 
-rm -rf %buildroot%_datadir/%name
+rm -rf %{buildroot}%{_datadir}/%{name}
 
 # rename some executables
-mv %buildroot%_bindir/long_message %buildroot%_bindir/spd_long_message
-mv %buildroot%_bindir/run_test %buildroot%_bindir/spd_run_test
+mv %{buildroot}%{_bindir}/long_message %{buildroot}%{_bindir}/spd_long_message
+mv %{buildroot}%{_bindir}/run_test %{buildroot}%{_bindir}/spd_run_test
 
 # speech-dispatcherd service
-install -d -m 0755 %buildroot%_initrddir
-install -m 0755 %SOURCE1 %buildroot%_initrddir/speech-dispatcherd
+install -d -m 0755 %{buildroot}%{_initrddir}
+install -m 0755 %SOURCE1 %{buildroot}%{_initrddir}/speech-dispatcherd
 
 # fix perm in _test.py
-chmod +x %buildroot%python_sitelib/speechd/_test.py
+chmod +x %{buildroot}%{python_sitelib}/speechd/_test.py
 
 # logrotate install
-install -d -m 0755 %buildroot%_sysconfdir/logrotate.d
-install -m 0644 %SOURCE2 %buildroot%_sysconfdir/logrotate.d/%name
+install -d -m 0755 %{buildroot}%{_sysconfdir}/logrotate.d
+install -m 0644 %SOURCE2 %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
 
 # create the needed directory for logs
-install -d -m 0755 %buildroot%_logdir/%name
+install -d -m 0755 %{buildroot}%{_logdir}/%{name}
 
 # install the /etc/default configuration file
-install -d -m 0755 %buildroot%_sysconfdir/default
-install -m 0644 %SOURCE3 %buildroot%_sysconfdir/default/speech-dispatcherd
+install -d -m 0755 %{buildroot}%{_sysconfdir}/default
+install -m 0644 %SOURCE3 %{buildroot}%{_sysconfdir}/default/speech-dispatcherd
 
 # remove flite module from the default configuration in speechd.conf
-sed -i -e "210 s:AddModule:#AddModule:g" %buildroot%_sysconfdir/%name/speechd.conf
-
-%clean
-rm -rf %buildroot
-
-
-%changelog
-* Sat Jul 07 2012 Bernhard Rosenkraenzer <bero@bero.eu> 0.7.1-2
-+ Revision: 808448
-- Make it build in current environment
-
-* Sun Apr 10 2011 Zé <ze@mandriva.org> 0.7.1-1
-+ Revision: 652299
-- export python path else isnt correctly detected in arch x86_64
-- arrange spec
-- 0.7.1
-- use bcond macro instead
-- add libao support
-- update patch1
-- drop patches:0,3 (fixed upstream)
-- drop patch2,different makefile
-- set ldflags (remove --no-undefined -Wl to avoid breaking build)
-- fix spec to avoid listing files twice
-
-* Wed Nov 18 2009 Jérôme Brenier <incubusss@mandriva.org> 0.6.7-3mdv2011.0
-+ Revision: 467193
-- fix build (getline conflict) : patch from debian
-
-  + Thierry Vignaud <tv@mandriva.org>
-    - rebuild
-
-* Sun Jan 04 2009 Funda Wang <fwang@mandriva.org> 0.6.7-2mdv2009.1
-+ Revision: 324152
-- fix strfmt
-- rebuild
-
-* Tue Nov 11 2008 Nicolas Lécureuil <nlecureuil@mandriva.com> 0.6.7-1mdv2009.1
-+ Revision: 302106
-- import speech-dispatcher
+sed -i -e "210 s:AddModule:#AddModule:g" %{buildroot}%{_sysconfdir}/%{name}/speechd.conf
 
