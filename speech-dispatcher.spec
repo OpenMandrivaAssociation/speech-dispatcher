@@ -17,17 +17,19 @@ Group:		System/Libraries
 License:	GPLv2
 Url:		http://www.freebsoft.org/speechd
 Source0:	http://www.freebsoft.org/pub/projects/speechd/%{name}-%{version}.tar.gz
-# modified Fedora init script 
-Source1:	speech-dispatcherd.init.mdv
+# Fedora systemd unit
+Source1:	speech-dispatcherd.service
 Source2:	speech-dispatcher.logrotate
 Source3:	speech-dispatcherd.default
 Source4:	speech-dispatcher-user-pulse.example
 Source10:	%{name}.rpmlintrc
+# from ubuntu
+Patch0:		python3.patch
 Patch1:		speech-dispatcher-0.7.1-fix-str-fmt.patch
 
 BuildRequires:	texinfo
 BuildRequires:	pkgconfig(dotconf)
-BuildRequires:	pkgconfig(python)
+BuildRequires:	pkgconfig(python3)
 %if %{with alsa}
 BuildRequires:	pkgconfig(alsa)
 %endif
@@ -65,7 +67,7 @@ people to work with computer and Internet based on free software.
 %{_bindir}/spd_run_test
 %{_bindir}/spdsend
 %{_bindir}/%{name}
-%{_initrddir}/speech-dispatcherd
+%{_unitdir}/speech-dispatcherd.service
 %config %{_sysconfdir}/logrotate.d/%{name}
 %config(noreplace) %{_sysconfdir}/%{name}/speechd.conf
 %config(noreplace) %{_sysconfdir}/%{name}/clients/*.conf
@@ -100,30 +102,30 @@ This package contains development files for %{name}.
 %{_includedir}/*
 %{_libdir}/lib*.so
 
-%package -n python-%{sname}
+%package -n python3-%{sname}
 Summary:	A Python library for communication with Speech Dispatcher
 Group:		System/Libraries
 Requires:	%{name} = %{version}-%{release}
 
-%description -n python-%{sname}
+%description -n python3-%{sname}
 This package provides a Python library for communication 
 with Speech Dispatcher.
 
-%files -n python-%{sname}
+%files -n python3-%{sname}
 %doc ChangeLog
 %{_bindir}/spd-conf
-%{python_sitelib}/speechd*
+%{python3_sitelib}/speechd*
 
 %prep
 %setup -q
-%patch1 -p0
+%apply_patches
 cp -p %SOURCE4 .
 
 %build
 %ifarch x86_64
-export am_cv_python_pyexecdir=%{python_sitelib}
+export am_cv_python_pyexecdir=%{python3_sitelib}
 %endif
-%configure2_5x \
+%configure \
 	LDFLAGS=' -Wl,--as-needed -Wl,-z,relro -Wl,-O1 -Wl,--build-id' \
 	--disable-static \
 %if %{with alsa}
@@ -152,7 +154,7 @@ export am_cv_python_pyexecdir=%{python_sitelib}
 	--without-libao
 %endif
 
-%make
+%make LIBS='-lpulse'
 
 %install
 %makeinstall_std
@@ -164,23 +166,20 @@ rm -rf %{buildroot}%{_datadir}/%{name}
 mv %{buildroot}%{_bindir}/long_message %{buildroot}%{_bindir}/spd_long_message
 mv %{buildroot}%{_bindir}/run_test %{buildroot}%{_bindir}/spd_run_test
 
-# speech-dispatcherd service
-install -d -m 0755 %{buildroot}%{_initrddir}
-install -m 0755 %SOURCE1 %{buildroot}%{_initrddir}/speech-dispatcherd
-
 # fix perm in _test.py
-chmod +x %{buildroot}%{python_sitelib}/speechd/_test.py
+chmod +x %{buildroot}%{python3_sitelib}/speechd/_test.py
+
+# speech-dispatcher service
+install -Dm 0644 %SOURCE1 %{buildroot}%{_unitdir}/speech-dispatcherd.service
 
 # logrotate install
-install -d -m 0755 %{buildroot}%{_sysconfdir}/logrotate.d
-install -m 0644 %SOURCE2 %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
+install -Dm 0644 %SOURCE2 %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
+
+# install the /etc/default configuration file
+install -Dm 0644 %SOURCE3 %{buildroot}%{_sysconfdir}/default/speech-dispatcherd
 
 # create the needed directory for logs
 install -d -m 0755 %{buildroot}%{_logdir}/%{name}
-
-# install the /etc/default configuration file
-install -d -m 0755 %{buildroot}%{_sysconfdir}/default
-install -m 0644 %SOURCE3 %{buildroot}%{_sysconfdir}/default/speech-dispatcherd
 
 # remove flite module from the default configuration in speechd.conf
 sed -i -e "210 s:AddModule:#AddModule:g" %{buildroot}%{_sysconfdir}/%{name}/speechd.conf

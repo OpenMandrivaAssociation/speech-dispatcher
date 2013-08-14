@@ -1,5 +1,5 @@
---- src/modules/festival_client.c.orig	2010-09-01 14:30:12.000000000 +0100
-+++ src/modules/festival_client.c	2011-04-09 01:05:00.206459349 +0100
+--- ./src/modules/festival_client.c.orig	2010-09-01 14:30:12.000000000 +0100
++++ ./src/modules/festival_client.c	2011-04-09 01:05:00.206459349 +0100
 @@ -437,7 +437,7 @@
          fd = fdopen(dup(info->server_fd),"wb"); \
          if (fd != NULL){ \
@@ -28,8 +28,8 @@
      for (p=text; p && (*p != '\0'); p++)
      {
 
---- src/modules/module_utils.c.str	2009-01-04 07:49:22.000000000 +0100
-+++ src/modules/module_utils.c	2009-01-04 07:49:37.000000000 +0100
+--- ./src/modules/module_utils.c.str	2009-01-04 07:49:22.000000000 +0100
++++ ./src/modules/module_utils.c	2009-01-04 07:49:37.000000000 +0100
 @@ -899,7 +899,7 @@
  {
      pthread_mutex_lock(&module_stdout_mutex);
