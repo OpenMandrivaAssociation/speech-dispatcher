@@ -12,7 +12,7 @@
 Summary:	Speech Dispatcher provides a device independent layer for speech synthesis
 Name:		speech-dispatcher
 Version:	0.7.1
-Release:	9
+Release:	10
 Group:		System/Libraries
 License:	GPLv2
 Url:		http://www.freebsoft.org/speechd
