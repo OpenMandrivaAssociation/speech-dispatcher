@@ -25,6 +25,7 @@ Source4:	speech-dispatcher-user-pulse.example
 Source10:	%{name}.rpmlintrc
 
 BuildRequires:	texinfo
+BuildRequires:	intltool
 BuildRequires:	pkgconfig(dotconf)
 BuildRequires:	pkgconfig(python3)
 %if %{with alsa}
