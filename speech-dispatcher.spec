@@ -26,6 +26,7 @@ Source10:	%{name}.rpmlintrc
 
 BuildRequires:	texinfo
 BuildRequires:	intltool
+BuildRequires:	libtool-devel
 BuildRequires:	pkgconfig(dotconf)
 BuildRequires:	pkgconfig(python3)
 %if %{with alsa}
