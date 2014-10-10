@@ -11,8 +11,8 @@
 
 Summary:	Speech Dispatcher provides a device independent layer for speech synthesis
 Name:		speech-dispatcher
-Version:	0.7.1
-Release:	10
+Version:	0.8.1
+Release:	1
 Group:		System/Libraries
 License:	GPLv2
 Url:		http://www.freebsoft.org/speechd
@@ -23,9 +23,6 @@ Source2:	speech-dispatcher.logrotate
 Source3:	speech-dispatcherd.default
 Source4:	speech-dispatcher-user-pulse.example
 Source10:	%{name}.rpmlintrc
-# from ubuntu
-Patch0:		python3.patch
-Patch1:		speech-dispatcher-0.7.1-fix-str-fmt.patch
 
 BuildRequires:	texinfo
 BuildRequires:	pkgconfig(dotconf)
@@ -57,14 +54,10 @@ people to work with computer and Internet based on free software.
 %preun
 %_preun_service speech-dispatcherd || :
 
-%files
+%files -f %{name}.lang
 %doc AUTHORS NEWS README COPYING INSTALL
 %doc ChangeLog speech-dispatcher-user-pulse.example
-%{_bindir}/cli*
-%{_bindir}/connection_recovery
 %{_bindir}/spd-say
-%{_bindir}/spd_long_message
-%{_bindir}/spd_run_test
 %{_bindir}/spdsend
 %{_bindir}/%{name}
 %{_unitdir}/speech-dispatcherd.service
@@ -101,20 +94,22 @@ This package contains development files for %{name}.
 %files -n %{devname}
 %{_includedir}/*
 %{_libdir}/lib*.so
+%{_libdir}/pkgconfig/%{name}.pc
 
-%package -n python3-%{sname}
+%package -n python-%{sname}
 Summary:	A Python library for communication with Speech Dispatcher
 Group:		System/Libraries
 Requires:	%{name} = %{version}-%{release}
+%rename	python3-%{sname}
 
-%description -n python3-%{sname}
+%description -n python-%{sname}
 This package provides a Python library for communication 
 with Speech Dispatcher.
 
-%files -n python3-%{sname}
+%files -n python-%{sname}
 %doc ChangeLog
 %{_bindir}/spd-conf
-%{python3_sitelib}/speechd*
+%{py3_puresitedir}/speechd*
 
 %prep
 %setup -q
@@ -123,10 +118,9 @@ cp -p %SOURCE4 .
 
 %build
 %ifarch x86_64
-export am_cv_python_pyexecdir=%{python3_sitelib}
+export am_cv_python_pyexecdir=%{py3_puresitedir}
 %endif
 %configure \
-	LDFLAGS=' -Wl,--as-needed -Wl,-z,relro -Wl,-O1 -Wl,--build-id' \
 	--disable-static \
 %if %{with alsa}
 	--with-alsa \
@@ -154,7 +148,7 @@ export am_cv_python_pyexecdir=%{python3_sitelib}
 	--without-libao
 %endif
 
-%make LIBS='-lpulse'
+%make
 
 %install
 %makeinstall_std
@@ -162,12 +156,8 @@ export am_cv_python_pyexecdir=%{python3_sitelib}
 # remove duplicates with /etc conf files 
 rm -rf %{buildroot}%{_datadir}/%{name}
 
-# rename some executables
-mv %{buildroot}%{_bindir}/long_message %{buildroot}%{_bindir}/spd_long_message
-mv %{buildroot}%{_bindir}/run_test %{buildroot}%{_bindir}/spd_run_test
-
 # fix perm in _test.py
-chmod +x %{buildroot}%{python3_sitelib}/speechd/_test.py
+chmod +x %{buildroot}%{py3_puresitedir}/speechd/_test.py
 
 # speech-dispatcher service
 install -Dm 0644 %SOURCE1 %{buildroot}%{_unitdir}/speech-dispatcherd.service
@@ -184,3 +174,4 @@ install -d -m 0755 %{buildroot}%{_logdir}/%{name}
 # remove flite module from the default configuration in speechd.conf
 sed -i -e "210 s:AddModule:#AddModule:g" %{buildroot}%{_sysconfdir}/%{name}/speechd.conf
 
+%find_lang %{name}

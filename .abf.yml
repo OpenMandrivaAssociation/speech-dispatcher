@@ -1,2 +1,4 @@
+removed_sources:
+  speech-dispatcher-0.7.1.tar.gz: be911de1ef334fa1708a7489f9dde51b499ab265
 sources:
-  "speech-dispatcher-0.7.1.tar.gz": be911de1ef334fa1708a7489f9dde51b499ab265
+  speech-dispatcher-0.8.1.tar.gz: d15d037d4a512d087e9e43621e2f98beabbfc4fe
