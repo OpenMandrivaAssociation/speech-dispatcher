@@ -44,6 +44,7 @@ BuildRequires:	espeak-devel
 %if %{with libao}
 BuildRequires:	pkgconfig(ao)
 %endif
+BuildRequires:	pkgconfig(sndfile)
 
 %description
 This is the Speech Dispatcher project (speech-dispatcher). It is a part of the
