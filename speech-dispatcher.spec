@@ -1,7 +1,7 @@
-%define sname	speechd
-%define major	2
-%define libname	%mklibname %{sname} %{major}
-%define devname	%mklibname %{sname} -d
+%define sname speechd
+%define major 2
+%define libname %mklibname %{sname} %{major}
+%define devname %mklibname %{sname} -d
 
 %bcond_without alsa
 %bcond_without pulse
@@ -12,7 +12,7 @@
 Summary:	Speech Dispatcher provides a device independent layer for speech synthesis
 Name:		speech-dispatcher
 Version:	0.8.3
-Release:	2
+Release:	3
 Group:		System/Libraries
 License:	GPLv2
 Url:		http://www.freebsoft.org/speechd
@@ -51,18 +51,13 @@ This is the Speech Dispatcher project (speech-dispatcher). It is a part of the
 Free(b)soft project, which is intended to allow blind and visually impaired
 people to work with computer and Internet based on free software.
 
-%post
-%_post_service speech-dispatcherd || :
-
-%preun
-%_preun_service speech-dispatcherd || :
-
 %files -f %{name}.lang
 %doc AUTHORS NEWS README COPYING INSTALL
 %doc ChangeLog speech-dispatcher-user-pulse.example
 %{_bindir}/spd-say
 %{_bindir}/spdsend
 %{_bindir}/%{name}
+%{_presetdir}/86-speech-dispacherd.preset
 %{_unitdir}/speech-dispatcherd.service
 %config %{_sysconfdir}/logrotate.d/%{name}
 %config(noreplace) %{_sysconfdir}/%{name}/speechd.conf
@@ -132,6 +127,7 @@ export am_cv_python_pyexecdir=%{py3_puresitedir}
 %endif
 %if %{with pulse}
 	--with-pulse \
+	--with-default-audio-method=pulse \
 %else
 	--without-pulse \
 %endif
@@ -163,18 +159,23 @@ rm -rf %{buildroot}%{_datadir}/%{name}
 chmod +x %{buildroot}%{py3_puresitedir}/speechd/_test.py
 
 # speech-dispatcher service
-install -Dm 0644 %SOURCE1 %{buildroot}%{_unitdir}/speech-dispatcherd.service
+install -Dm 0644 %{SOURCE1} %{buildroot}%{_unitdir}/speech-dispatcherd.service
 
 # logrotate install
-install -Dm 0644 %SOURCE2 %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
+install -Dm 0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
 
 # install the /etc/default configuration file
-install -Dm 0644 %SOURCE3 %{buildroot}%{_sysconfdir}/default/speech-dispatcherd
+install -Dm 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/default/speech-dispatcherd
 
 # create the needed directory for logs
 install -d -m 0755 %{buildroot}%{_logdir}/%{name}
 
 # remove flite module from the default configuration in speechd.conf
 sed -i -e "210 s:AddModule:#AddModule:g" %{buildroot}%{_sysconfdir}/%{name}/speechd.conf
+
+install -d %{buildroot}%{_presetdir}
+cat > %{buildroot}%{_presetdir}/86-speech-dispacherd.preset << EOF
+enable speech-dispatcherd.service
+EOF
 
 %find_lang %{name}

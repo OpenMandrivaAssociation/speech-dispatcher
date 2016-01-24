@@ -26,7 +26,7 @@
 # out on the screen or in the logfile (see LogFile)
 # 0 means nothing, 5 means everything (not recommended).
 
-LogLevel 3 
+LogLevel 3
 
 # The LogDir specifies where Speech Dispatcher writes its logging messages
 # (status information, error messages, etc.).  Specify "stdout" for
@@ -142,7 +142,7 @@ DefaultVolume 100
 # PulseAudio is a sound server for POSIX and WIN32 systems. 
 #
 
-AudioOutputMethod "pulse"
+AudioOutputMethod "pulse,alsa"
 
 # What ALSA device to use when Advanced Linux Sound Architecture is
 # chosen for the audio output.
