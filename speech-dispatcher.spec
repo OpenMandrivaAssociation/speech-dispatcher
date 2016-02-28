@@ -12,7 +12,7 @@
 Summary:	Speech Dispatcher provides a device independent layer for speech synthesis
 Name:		speech-dispatcher
 Version:	0.8.3
-Release:	3
+Release:	4
 Group:		System/Libraries
 License:	GPLv2
 Url:		http://www.freebsoft.org/speechd
@@ -107,7 +107,7 @@ with Speech Dispatcher.
 %files -n python-%{sname}
 %doc ChangeLog
 %{_bindir}/spd-conf
-%{py3_puresitedir}/speechd*
+%{python_sitearch}/speechd*
 
 %prep
 %setup -q
@@ -156,7 +156,7 @@ export am_cv_python_pyexecdir=%{py3_puresitedir}
 rm -rf %{buildroot}%{_datadir}/%{name}
 
 # fix perm in _test.py
-chmod +x %{buildroot}%{py3_puresitedir}/speechd/_test.py
+chmod +x %{buildroot}%{python_sitearch}/speechd/_test.py
 
 # speech-dispatcher service
 install -Dm 0644 %{SOURCE1} %{buildroot}%{_unitdir}/speech-dispatcherd.service
