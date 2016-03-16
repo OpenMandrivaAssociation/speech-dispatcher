@@ -156,7 +156,9 @@ export am_cv_python_pyexecdir=%{py3_puresitedir}
 rm -rf %{buildroot}%{_datadir}/%{name}
 
 # fix perm in _test.py
+if [ -e %{buildroot}%{python_sitearch}/speechd/_test.py ]; then
 chmod +x %{buildroot}%{python_sitearch}/speechd/_test.py
+fi
 
 # speech-dispatcher service
 install -Dm 0644 %{SOURCE1} %{buildroot}%{_unitdir}/speech-dispatcherd.service
