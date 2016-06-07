@@ -12,7 +12,7 @@
 Summary:	Speech Dispatcher provides a device independent layer for speech synthesis
 Name:		speech-dispatcher
 Version:	0.8.4
-Release:	1
+Release:	2
 Group:		System/Libraries
 License:	GPLv2
 Url:		http://www.freebsoft.org/speechd
@@ -57,8 +57,8 @@ people to work with computer and Internet based on free software.
 %{_bindir}/spd-say
 %{_bindir}/spdsend
 %{_bindir}/%{name}
-%{_presetdir}/86-speech-dispacherd.preset
-%{_unitdir}/speech-dispatcherd.service
+%{_userunitdir}/speech-dispatcherd.service
+%{_userunitdir}/default.target.wants/speech-dispatcherd.service
 %config %{_sysconfdir}/logrotate.d/%{name}
 %config(noreplace) %{_sysconfdir}/%{name}/speechd.conf
 %config(noreplace) %{_sysconfdir}/%{name}/clients/*.conf
@@ -149,13 +149,17 @@ cp -p %SOURCE4 .
 %install
 %makeinstall_std
 
-# remove duplicates with /etc conf files 
+# remove duplicates with /etc conf files
 rm -rf %{buildroot}%{_datadir}/%{name}
 
 chmod +x %{buildroot}%{python_sitearch}/speechd/_test.py
 
 # speech-dispatcher service
-install -Dm 0644 %{SOURCE1} %{buildroot}%{_unitdir}/speech-dispatcherd.service
+install -Dm 0644 %{SOURCE1} %{buildroot}%{_userunitdir}/speech-dispatcherd.service
+
+# (tpg) enable pulseaudio in userland
+mkdir -p %{buildroot}%{_userunitdir}/default.target.wants
+ln -sf %{_userunitdir}/speech-dispatcherd.service %{buildroot}%{_userunitdir}/default.target.wants/speech-dispatcherd.service
 
 # logrotate install
 install -Dm 0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
@@ -168,10 +172,5 @@ install -d -m 0755 %{buildroot}%{_logdir}/%{name}
 
 # remove flite module from the default configuration in speechd.conf
 sed -i -e "210 s:AddModule:#AddModule:g" %{buildroot}%{_sysconfdir}/%{name}/speechd.conf
-
-install -d %{buildroot}%{_presetdir}
-cat > %{buildroot}%{_presetdir}/86-speech-dispacherd.preset << EOF
-enable speech-dispatcherd.service
-EOF
 
 %find_lang %{name}
