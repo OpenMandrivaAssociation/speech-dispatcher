@@ -1,10 +1,11 @@
 [Unit]
 Description=Speech-Dispatcher an high-level device independent layer for speech synthesis.
 After=syslog.target
+After=pulseaduio.socket
 
 [Service]
 Type=forking
 ExecStart=/usr/bin/speech-dispatcher -d
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
