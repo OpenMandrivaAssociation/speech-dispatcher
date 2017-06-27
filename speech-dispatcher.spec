@@ -11,7 +11,7 @@
 
 Summary:	Speech Dispatcher provides a device independent layer for speech synthesis
 Name:		speech-dispatcher
-Version:	0.8.5
+Version:	0.8.7
 Release:	1
 Group:		System/Libraries
 License:	GPLv2
@@ -53,7 +53,7 @@ people to work with computer and Internet based on free software.
 
 %files -f %{name}.lang
 %doc AUTHORS NEWS README COPYING INSTALL
-%doc ChangeLog speech-dispatcher-user-pulse.example
+%doc speech-dispatcher-user-pulse.example
 %{_bindir}/spd-say
 %{_bindir}/spdsend
 %{_bindir}/%{name}
@@ -101,11 +101,10 @@ Requires:	%{name} = %{version}-%{release}
 %rename		python3-%{sname}
 
 %description -n python-%{sname}
-This package provides a Python library for communication 
+This package provides a Python library for communication
 with Speech Dispatcher.
 
 %files -n python-%{sname}
-%doc ChangeLog
 %{_bindir}/spd-conf
 %{python_sitearch}/speechd*
 
