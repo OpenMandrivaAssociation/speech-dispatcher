@@ -5,7 +5,7 @@
 
 %bcond_without alsa
 %bcond_without pulse
-%bcond_without nas
+%bcond_with nas
 %bcond_without espeak
 %bcond_without libao
 
@@ -109,8 +109,7 @@ with Speech Dispatcher.
 %{python_sitearch}/speechd*
 
 %prep
-%setup -q
-%apply_patches
+%autosetup -p1
 cp -p %SOURCE4 .
 
 %build
@@ -143,10 +142,10 @@ cp -p %SOURCE4 .
 	--without-libao
 %endif
 
-%make
+%make_build
 
 %install
-%makeinstall_std
+%make_install
 
 # remove duplicates with /etc conf files
 rm -rf %{buildroot}%{_datadir}/%{name}
