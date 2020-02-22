@@ -11,12 +11,12 @@
 
 Summary:	Speech Dispatcher provides a device independent layer for speech synthesis
 Name:		speech-dispatcher
-Version:	0.8.8
-Release:	4
+Version:	0.9.1
+Release:	1
 Group:		System/Libraries
 License:	GPLv2
 Url:		http://www.freebsoft.org/speechd
-Source0:	http://www.freebsoft.org/pub/projects/speechd/%{name}-%{version}.tar.gz
+Source0:	https://github.com/brailcom/speechd/releases/download/%{version}/%{name}-%{version}.tar.gz
 # Fedora systemd unit
 Source1:	speech-dispatcherd.service
 Source2:	speech-dispatcher.logrotate
