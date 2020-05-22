@@ -51,7 +51,7 @@ Free(b)soft project, which is intended to allow blind and visually impaired
 people to work with computer and Internet based on free software.
 
 %files -f %{name}.lang
-%doc AUTHORS NEWS README COPYING INSTALL
+%doc AUTHORS NEWS README INSTALL
 %doc speech-dispatcher-user-pulse.example
 %{_bindir}/spd-say
 %{_bindir}/spdsend
@@ -108,6 +108,8 @@ with Speech Dispatcher.
 
 %prep
 %autosetup -p1
+cp -p %SOURCE4 .
+
 tar xf %{SOURCE1}
 
 %build
