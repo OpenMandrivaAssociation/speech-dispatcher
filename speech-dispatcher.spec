@@ -120,7 +120,7 @@ tar xf %{SOURCE1}
 	--with-kali=no \
 	--with-baratinoo=no \
 	--with-ibmtts=no \
-	--with-flite \
+	--without-flite \
 	--without-espeak-ng \
 %if %{with alsa}
 	--with-alsa \
