@@ -163,6 +163,7 @@ mv %{buildroot}%{_datadir}/speech-dispatcher/conf/clients/* %{buildroot}%{_sysco
 mv %{buildroot}%{_datadir}/speech-dispatcher/conf/modules/* %{buildroot}%{_sysconfdir}/speech-dispatcher/modules
 
 # (tpg) use our config
+mkdir -p %{buildroot}%{_sysconfdir}/speech-dispatcher/conf
 cp %{SOURCE4} %{buildroot}%{_sysconfdir}/speech-dispatcher/conf/speechd.conf
 
 # remove duplicates with /etc conf files
