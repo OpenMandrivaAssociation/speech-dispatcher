@@ -56,8 +56,6 @@ people to work with computer and Internet based on free software.
 %{_bindir}/spd-say
 %{_bindir}/spdsend
 %{_bindir}/%{name}
-%{_userunitdir}/speech-dispatcherd.service
-%{_userunitdir}/default.target.wants/speech-dispatcherd.service
 %config %{_sysconfdir}/logrotate.d/%{name}
 %config(noreplace) %{_sysconfdir}/%{name}/speechd.conf
 %config(noreplace) %{_sysconfdir}/%{name}/clients/*.conf
@@ -109,8 +107,6 @@ with Speech Dispatcher.
 
 %prep
 %autosetup -p1
-cp -p %SOURCE4 .
-
 tar xf %{SOURCE1}
 
 %build
@@ -162,18 +158,17 @@ find %{buildroot} -name '*.la' -delete
 # Move the config files from /usr/share to /etc
 mkdir -p %{buildroot}%{_sysconfdir}/speech-dispatcher/clients
 mkdir -p %{buildroot}%{_sysconfdir}/speech-dispatcher/modules
-mv %{buildroot}%{_datadir}/speech-dispatcher/conf/speechd.conf %{buildroot}%{_sysconfdir}/speech-dispatcher/
+%{buildroot}%{_datadir}/speech-dispatcher/conf/speechd.conf %{buildroot}%{_sysconfdir}/speech-dispatcher/
 mv %{buildroot}%{_datadir}/speech-dispatcher/conf/clients/* %{buildroot}%{_sysconfdir}/speech-dispatcher/clients
 mv %{buildroot}%{_datadir}/speech-dispatcher/conf/modules/* %{buildroot}%{_sysconfdir}/speech-dispatcher/modules
+
+# (tpg) use our config
+cp %{SOURCE4} %{buildroot}%{_sysconfdir}/speech-dispatcher/conf/speechd.conf
 
 # remove duplicates with /etc conf files
 rm -rf %{buildroot}%{_datadir}/%{name}
 
 chmod +x %{buildroot}%{python_sitearch}/speechd/_test.py
-
-# (tpg) enable pulseaudio in userland
-mkdir -p %{buildroot}%{_userunitdir}/default.target.wants
-ln -sf %{_userunitdir}/speech-dispatcherd.service %{buildroot}%{_userunitdir}/default.target.wants/speech-dispatcherd.service
 
 # logrotate install
 install -Dm 0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
@@ -188,6 +183,6 @@ install -d -m 0755 %{buildroot}%{_logdir}/%{name}
 sed -i -e "210 s:AddModule:#AddModule:g" %{buildroot}%{_sysconfdir}/%{name}/speechd.conf
 
 # enable pulseaudio as default with a fallback to alsa
-sed 's/# AudioOutputMethod "pulse,alsa"/AudioOutputMethod "pulse,alsa"/' %{buildroot}%{_sysconfdir}/speech-dispatcher/speechd.conf
+sed -i -e 's/# AudioOutputMethod "pulse,alsa"/AudioOutputMethod "pulse,alsa"/' %{buildroot}%{_sysconfdir}/speech-dispatcher/speechd.conf
 
 %find_lang %{name}
