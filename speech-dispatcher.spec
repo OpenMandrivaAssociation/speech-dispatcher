@@ -61,6 +61,7 @@ people to work with computer and Internet based on free software.
 %config(noreplace) %{_sysconfdir}/%{name}/clients/*.conf
 %config(noreplace) %{_sysconfdir}/%{name}/modules/*.conf
 %config(noreplace) %{_sysconfdir}/default/speech-dispatcherd
+%{_datadir}/speech-dispatcher/conf/speechd.conf
 %{_libdir}/%{name}-modules
 %{_libdir}/%{name}
 %{_datadir}/sounds/%{name}
@@ -158,7 +159,6 @@ find %{buildroot} -name '*.la' -delete
 # Move the config files from /usr/share to /etc
 mkdir -p %{buildroot}%{_sysconfdir}/speech-dispatcher/clients
 mkdir -p %{buildroot}%{_sysconfdir}/speech-dispatcher/modules
-%{buildroot}%{_datadir}/speech-dispatcher/conf/speechd.conf %{buildroot}%{_sysconfdir}/speech-dispatcher/
 mv %{buildroot}%{_datadir}/speech-dispatcher/conf/clients/* %{buildroot}%{_sysconfdir}/speech-dispatcher/clients
 mv %{buildroot}%{_datadir}/speech-dispatcher/conf/modules/* %{buildroot}%{_sysconfdir}/speech-dispatcher/modules
 
