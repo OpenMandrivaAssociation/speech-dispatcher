@@ -121,6 +121,7 @@ tar xf %{SOURCE1}
 	--with-baratinoo=no \
 	--with-ibmtts=no \
 	--with-flite \
+	--without-espeak-ng \
 %if %{with alsa}
 	--with-alsa \
 %else
@@ -139,10 +140,8 @@ tar xf %{SOURCE1}
 %endif
 %if %{with espeak}
 	--with-espeak \
-	--with-espeak-ng \
 %else
 	--without-espeak \
-	--without-espeak-ng \
 %endif
 %if %{with libao}
 	--with-libao
