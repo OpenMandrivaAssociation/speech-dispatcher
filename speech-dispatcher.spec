@@ -17,13 +17,12 @@ Group:		System/Libraries
 License:	GPLv2
 Url:		http://www.freebsoft.org/speechd
 Source0:	https://github.com/brailcom/speechd/releases/download/%{version}/%{name}-%{version}.tar.gz
-# Fedora systemd unit
-Source1:	speech-dispatcherd.service
+Source1:	http://www.freebsoft.org/pub/projects/sound-icons/sound-icons-0.1.tar.gz
 Source2:	speech-dispatcher.logrotate
 Source3:	speech-dispatcherd.default
 Source4:	speech-dispatcher-user-pulse.example
 Source10:	%{name}.rpmlintrc
-
+Patch0:		0001-Remove-pyxdg-dependency.patch
 BuildRequires:	texinfo
 BuildRequires:	intltool
 BuildRequires:	libtool-devel
@@ -112,9 +111,16 @@ with Speech Dispatcher.
 %autosetup -p1
 cp -p %SOURCE4 .
 
+tar xf %{SOURCE1}
+
 %build
 %configure \
 	--disable-static \
+	--without-oss \
+	--with-kali=no \
+	--with-baratinoo=no \
+	--with-ibmtts=no \
+	--with-flite \
 %if %{with alsa}
 	--with-alsa \
 %else
@@ -133,8 +139,10 @@ cp -p %SOURCE4 .
 %endif
 %if %{with espeak}
 	--with-espeak \
+	--with-espeak-ng \
 %else
 	--without-espeak \
+	--without-espeak-ng \
 %endif
 %if %{with libao}
 	--with-libao
@@ -147,13 +155,22 @@ cp -p %SOURCE4 .
 %install
 %make_install
 
+#Remove %{_infodir}/dir file
+rm -f %{buildroot}%{_infodir}/dir
+
+find %{buildroot} -name '*.la' -delete
+
+# Move the config files from /usr/share to /etc
+mkdir -p %{buildroot}%{_sysconfdir}/speech-dispatcher/clients
+mkdir -p %{buildroot}%{_sysconfdir}/speech-dispatcher/modules
+mv %{buildroot}%{_datadir}/speech-dispatcher/conf/speechd.conf %{buildroot}%{_sysconfdir}/speech-dispatcher/
+mv %{buildroot}%{_datadir}/speech-dispatcher/conf/clients/* %{buildroot}%{_sysconfdir}/speech-dispatcher/clients
+mv %{buildroot}%{_datadir}/speech-dispatcher/conf/modules/* %{buildroot}%{_sysconfdir}/speech-dispatcher/modules
+
 # remove duplicates with /etc conf files
 rm -rf %{buildroot}%{_datadir}/%{name}
 
 chmod +x %{buildroot}%{python_sitearch}/speechd/_test.py
-
-# speech-dispatcher service
-install -Dm 0644 %{SOURCE1} %{buildroot}%{_userunitdir}/speech-dispatcherd.service
 
 # (tpg) enable pulseaudio in userland
 mkdir -p %{buildroot}%{_userunitdir}/default.target.wants
@@ -170,5 +187,8 @@ install -d -m 0755 %{buildroot}%{_logdir}/%{name}
 
 # remove flite module from the default configuration in speechd.conf
 sed -i -e "210 s:AddModule:#AddModule:g" %{buildroot}%{_sysconfdir}/%{name}/speechd.conf
+
+# enable pulseaudio as default with a fallback to alsa
+sed 's/# AudioOutputMethod "pulse,alsa"/AudioOutputMethod "pulse,alsa"/' %{buildroot}%{_sysconfdir}/speech-dispatcher/speechd.conf
 
 %find_lang %{name}
