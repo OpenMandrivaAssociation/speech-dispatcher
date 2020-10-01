@@ -57,7 +57,12 @@ people to work with computer and Internet based on free software.
 %{_bindir}/spdsend
 %{_bindir}/%{name}
 %config %{_sysconfdir}/logrotate.d/%{name}
+%dir %{_sysconfdir}/%{name}
+%dir %{_sysconfdir}/%{name}/conf
+%dir %{_sysconfdir}/%{name}/clients
+%dir %{_sysconfdir}/%{name}/modules
 %config(noreplace) %{_sysconfdir}/%{name}/speechd.conf
+%config(noreplace) %{_sysconfdir}/%{name}/conf/speechd.conf
 %config(noreplace) %{_sysconfdir}/%{name}/clients/*.conf
 %config(noreplace) %{_sysconfdir}/%{name}/modules/*.conf
 %config(noreplace) %{_sysconfdir}/default/speech-dispatcherd
@@ -80,8 +85,8 @@ This package provides the shared libraries for Speech Dispatcher.
 %package -n %{devname}
 Summary:	Development files for %{name}
 Group:		Development/Other
-Requires:	%{name} = %{version}-%{release}
-Provides:	%{name}-devel = %{version}-%{release}
+Requires:	%{name} = %{EVRD}
+Provides:	%{name}-devel = %{EVRD}
 
 %description -n %{devname}
 This package contains development files for %{name}.
