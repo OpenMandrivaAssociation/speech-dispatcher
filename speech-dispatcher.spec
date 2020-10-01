@@ -51,7 +51,7 @@ Free(b)soft project, which is intended to allow blind and visually impaired
 people to work with computer and Internet based on free software.
 
 %files -f %{name}.lang
-%doc AUTHORS NEWS README INSTALL
+%doc AUTHORS NEWS INSTALL
 %doc speech-dispatcher-user-pulse.example
 %{_bindir}/spd-say
 %{_bindir}/spdsend
@@ -61,7 +61,6 @@ people to work with computer and Internet based on free software.
 %config(noreplace) %{_sysconfdir}/%{name}/clients/*.conf
 %config(noreplace) %{_sysconfdir}/%{name}/modules/*.conf
 %config(noreplace) %{_sysconfdir}/default/speech-dispatcherd
-%{_datadir}/speech-dispatcher/conf/speechd.conf
 %{_libdir}/%{name}-modules
 %{_libdir}/%{name}
 %{_datadir}/sounds/%{name}
