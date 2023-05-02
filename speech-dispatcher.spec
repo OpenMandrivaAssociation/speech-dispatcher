@@ -28,6 +28,7 @@ BuildRequires:	texinfo
 BuildRequires:	intltool
 BuildRequires:	libtool-devel
 BuildRequires:	pkgconfig(dotconf)
+BuildRequires:	pkgconfig(libsystemd)
 BuildRequires:	pkgconfig(python3)
 %if %{with alsa}
 BuildRequires:	pkgconfig(alsa)
