@@ -11,18 +11,18 @@ directory (XDG_CONFIG_HOME, then ~/.config then /tmp/$USERNAME/.config)
 
 diff --git a/src/api/python/speechd_config/config.py.in b/src/api/python/speechd_config/config.py.in
 index ccf8803..e8393e5 100644
---- a/src/api/python/speechd_config/config.py.in
-+++ b/src/api/python/speechd_config/config.py.in
-@@ -30,8 +30,6 @@ import socket
+--- a/src/api/python/speechd_config/config.py
++++ b/src/api/python/speechd_config/config.py
+@@ -29,8 +29,6 @@ import socket
  import sys
  import time
  
 -from xdg import BaseDirectory
 -
- # Locale/gettext configuration
+ # Configuration and sound data paths
+ from . import buildconfig
  
- locale.setlocale(locale.LC_ALL, '')
-@@ -167,7 +165,16 @@ class Tests:
+@@ -180,7 +178,16 @@ any later version. Please see COPYING fo
  
      def user_conf_dir(self):
          """Return user configuration directory"""
@@ -40,5 +40,12 @@ index ccf8803..e8393e5 100644
  
      def system_conf_dir(self):
          """Determine system configuration directory"""
--- 
-2.17.1
+@@ -679,7 +686,7 @@ This is usually not necessary, most appl
+             if setup_autostart:
+                 shutil.copy(
+                     os.path.join(buildconfig.SPD_DESKTOP_CONF_PATH, "speechd.desktop"),
+-                    os.path.join(BaseDirectory.xdg_config_home, "autostart/")
++                    os.path.join(os.environ['HOME'], "autostart/")
+                 )
+ 
+                 report(_("""

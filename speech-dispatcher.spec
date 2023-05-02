@@ -8,11 +8,12 @@
 %bcond_with nas
 %bcond_without espeak
 %bcond_without libao
+%bcond_with voxin
 
 Summary:	Speech Dispatcher provides a device independent layer for speech synthesis
 Name:		speech-dispatcher
-Version:	0.10.1
-Release:	2
+Version:	0.11.4
+Release:	1
 Group:		System/Libraries
 License:	GPLv2
 Url:		http://www.freebsoft.org/speechd
@@ -22,7 +23,7 @@ Source2:	speech-dispatcher.logrotate
 Source3:	speech-dispatcherd.default
 Source4:	speech-dispatcher-user-pulse.example
 Source10:	%{name}.rpmlintrc
-Patch0:		0001-Remove-pyxdg-dependency.patch
+##Patch0:		0001-Remove-pyxdg-dependency.patch
 BuildRequires:	texinfo
 BuildRequires:	intltool
 BuildRequires:	libtool-devel
@@ -53,6 +54,7 @@ people to work with computer and Internet based on free software.
 %files -f %{name}.lang
 %doc AUTHORS NEWS INSTALL
 %doc speech-dispatcher-user-pulse.example
+%{_unitdir}/%{name}d.service
 %{_bindir}/spd-say
 %{_bindir}/spdsend
 %{_bindir}/%{name}
@@ -66,7 +68,8 @@ people to work with computer and Internet based on free software.
 %config(noreplace) %{_sysconfdir}/%{name}/clients/*.conf
 %config(noreplace) %{_sysconfdir}/%{name}/modules/*.conf
 %config(noreplace) %{_sysconfdir}/default/speech-dispatcherd
-%{_libdir}/%{name}-modules
+#{_libdir}/%{name}-modules
+%{_libexecdir}/%{name}-modules
 %{_libdir}/%{name}
 %{_datadir}/sounds/%{name}
 %{_infodir}/*
@@ -147,11 +150,16 @@ tar xf %{SOURCE1}
 	--without-espeak \
 %endif
 %if %{with libao}
-	--with-libao
+	--with-libao \
 %else
-	--without-libao
+	--without-libao \
 %endif
-
+%if %{with voxin}
+	--with-voxin \
+%else
+	--without-voxin \
+%endif
+	%nil
 %make_build
 
 %install
