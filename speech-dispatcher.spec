@@ -16,7 +16,7 @@ Version:	0.11.5
 Release:	1
 Group:		System/Libraries
 License:	GPLv2
-Url:		http://www.freebsoft.org/speechd
+Url:		https://www.freebsoft.org/speechd
 Source0:	https://github.com/brailcom/speechd/releases/download/%{version}/%{name}-%{version}.tar.gz
 Source1:	http://www.freebsoft.org/pub/projects/sound-icons/sound-icons-0.1.tar.gz
 Source2:	speech-dispatcher.logrotate
