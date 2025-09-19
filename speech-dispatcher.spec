@@ -116,6 +116,8 @@ with Speech Dispatcher.
 tar xf %{SOURCE1}
 
 %build
+export CC=gcc
+export CXX=g++
 %configure \
 	--disable-static \
 	--without-oss \
