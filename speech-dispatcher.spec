@@ -12,21 +12,18 @@
 
 Summary:	Speech Dispatcher provides a device independent layer for speech synthesis
 Name:		speech-dispatcher
-Version:	0.11.5
+Version:	0.12.1
 Release:	1
 Group:		System/Libraries
 License:	GPLv2
 Url:		https://www.freebsoft.org/speechd
 Source0:	https://github.com/brailcom/speechd/releases/download/%{version}/%{name}-%{version}.tar.gz
 Source1:	http://www.freebsoft.org/pub/projects/sound-icons/sound-icons-0.1.tar.gz
-Source2:	speech-dispatcher.logrotate
-Source3:	speech-dispatcherd.default
-Source4:	speech-dispatcher-user-pulse.example
-Source10:	%{name}.rpmlintrc
 ##Patch0:		0001-Remove-pyxdg-dependency.patch
 BuildRequires:	texinfo
 BuildRequires:	intltool
 BuildRequires:	libtool-devel
+BuildRequires:	pkgconfig(glib-2.0)
 BuildRequires:	pkgconfig(dotconf)
 BuildRequires:	pkgconfig(libsystemd)
 BuildRequires:	pkgconfig(python3)
@@ -40,7 +37,7 @@ BuildRequires:	pkgconfig(libpulse)
 BuildRequires:	nas-devel
 %endif
 %if %{with espeak}
-BuildRequires:	espeak-devel
+BuildRequires:	pkgconfig(espeak-ng)
 %endif
 %if %{with libao}
 BuildRequires:	pkgconfig(ao)
@@ -116,8 +113,6 @@ with Speech Dispatcher.
 
 %prep
 %autosetup -p1
-cp -p %SOURCE4 .
-
 tar xf %{SOURCE1}
 
 %build
@@ -128,7 +123,9 @@ tar xf %{SOURCE1}
 	--with-baratinoo=no \
 	--with-ibmtts=no \
 	--without-flite \
-	--without-espeak-ng \
+ 	--with-systemdsystemunitdir=%{_unitdir} \
+	--with-systemduserunitdir=%{_prefix}/lib/systemd/user/ \
+ 	--without-espeak \
 %if %{with alsa}
 	--with-alsa \
 %else
@@ -146,9 +143,9 @@ tar xf %{SOURCE1}
 	--without-nas \
 %endif
 %if %{with espeak}
-	--with-espeak \
+	--with-espeak-ng \
 %else
-	--without-espeak \
+	--without-espeak-ng \
 %endif
 %if %{with libao}
 	--with-libao \
@@ -202,3 +199,10 @@ sed -i -e "210 s:AddModule:#AddModule:g" %{buildroot}%{_sysconfdir}/%{name}/spee
 sed -i -e 's/# AudioOutputMethod "pulse,alsa"/AudioOutputMethod "pulse,alsa"/' %{buildroot}%{_sysconfdir}/speech-dispatcher/speechd.conf
 
 %find_lang %{name}
+
+%post 
+%systemd_post speech-dispatcherd.service
+%postun
+%systemd_postun_with_restart speech-dispatcherd.service
+%preun
+%systemd_preun speech-dispatcherd.service
