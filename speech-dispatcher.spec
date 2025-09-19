@@ -1,3 +1,5 @@
+%define _disable_lto 1
+
 %define sname speechd
 %define major 2
 %define libname %mklibname %{sname} %{major}
