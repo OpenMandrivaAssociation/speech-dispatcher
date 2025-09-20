@@ -22,7 +22,7 @@ Url:		https://www.freebsoft.org/speechd
 Source0:	https://github.com/brailcom/speechd/releases/download/%{version}/%{name}-%{version}.tar.gz
 Source1:	http://www.freebsoft.org/pub/projects/sound-icons/sound-icons-0.1.tar.gz
 ##Patch0:		0001-Remove-pyxdg-dependency.patch
-Patch0:		missing-include.patch
+#Patch0:		missing-include.patch
 
 BuildRequires:	texinfo
 BuildRequires:	intltool
