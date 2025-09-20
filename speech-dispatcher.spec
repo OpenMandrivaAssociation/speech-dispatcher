@@ -186,10 +186,10 @@ mkdir -p %{buildroot}%{_sysconfdir}/speech-dispatcher/modules
 # remove duplicates with /etc conf files
 rm -rf %{buildroot}%{_datadir}/%{name}
 
-chmod +x %{buildroot}%{python_sitearch}/speechd/_test.py
+#chmod +x %{buildroot}%{python_sitearch}/speechd/_test.py
 
 # logrotate install
-install -Dm 0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
+#install -Dm 0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
 
 # install the /etc/default configuration file
 #install -Dm 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/default/speech-dispatcherd
