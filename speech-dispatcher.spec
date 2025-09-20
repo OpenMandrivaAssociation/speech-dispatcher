@@ -9,7 +9,7 @@
 %bcond_without pulse
 %bcond_with nas
 %bcond_without espeak
-%bcond_without libao
+%bcond_with libao
 %bcond_with voxin
 
 Summary:	Speech Dispatcher provides a device independent layer for speech synthesis
