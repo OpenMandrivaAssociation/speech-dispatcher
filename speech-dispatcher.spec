@@ -121,7 +121,7 @@ tar xf %{SOURCE1}
 %build
 #export CC=gcc
 #export CXX=g++
-LDFLAGS="-Wl,--undefined=MSG" ./configure \
+LDFLAGS="-Wl,--undefined=MSG" %configure \
 	--disable-static \
 	--without-oss \
 	--with-kali=no \
