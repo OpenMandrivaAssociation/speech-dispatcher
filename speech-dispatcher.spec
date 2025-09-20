@@ -56,25 +56,25 @@ people to work with computer and Internet based on free software.
 %doc AUTHORS NEWS INSTALL
 %doc speech-dispatcher-user-pulse.example
 %{_unitdir}/%{name}d.service
-%{_bindir}/spd-say
-%{_bindir}/spdsend
-%{_bindir}/%{name}
-%config %{_sysconfdir}/logrotate.d/%{name}
+#{_bindir}/spd-say
+#{_bindir}/spdsend
+#{_bindir}/%{name}
+#config %{_sysconfdir}/logrotate.d/%{name}
 %dir %{_sysconfdir}/%{name}
-%dir %{_sysconfdir}/%{name}/conf
+#dir %{_sysconfdir}/%{name}/conf
 %dir %{_sysconfdir}/%{name}/clients
 %dir %{_sysconfdir}/%{name}/modules
-%config(noreplace) %{_sysconfdir}/%{name}/speechd.conf
-%config(noreplace) %{_sysconfdir}/%{name}/conf/speechd.conf
-%config(noreplace) %{_sysconfdir}/%{name}/clients/*.conf
-%config(noreplace) %{_sysconfdir}/%{name}/modules/*.conf
-%config(noreplace) %{_sysconfdir}/default/speech-dispatcherd
+#config(noreplace) %{_sysconfdir}/%{name}/speechd.conf
+#config(noreplace) %{_sysconfdir}/%{name}/conf/speechd.conf
+#config(noreplace) %{_sysconfdir}/%{name}/clients/*.conf
+#config(noreplace) %{_sysconfdir}/%{name}/modules/*.conf
+#config(noreplace) %{_sysconfdir}/default/speech-dispatcherd
 #{_libdir}/%{name}-modules
-%{_libexecdir}/%{name}-modules
-%{_libdir}/%{name}
-%{_datadir}/sounds/%{name}
-%{_infodir}/*
-%{_logdir}/%{name}
+#{_libexecdir}/%{name}-modules
+#{_libdir}/%{name}
+#{_datadir}/sounds/%{name}
+#{_infodir}/*
+#{_logdir}/%{name}
 
 %package -n %{libname}
 Summary:	Shared libraries for %{name}
