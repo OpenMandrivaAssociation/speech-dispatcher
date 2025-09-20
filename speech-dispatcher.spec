@@ -176,7 +176,7 @@ find %{buildroot} -name '*.la' -delete
 # Move the config files from /usr/share to /etc
 mkdir -p %{buildroot}%{_sysconfdir}/speech-dispatcher/clients
 mkdir -p %{buildroot}%{_sysconfdir}/speech-dispatcher/modules
-mv %{buildroot}%{_datadir}/speech-dispatcher/conf/clients/* %{buildroot}%{_sysconfdir}/speech-dispatcher/clients
+#mv %{buildroot}%{_datadir}/speech-dispatcher/conf/clients/* %{buildroot}%{_sysconfdir}/speech-dispatcher/clients
 mv %{buildroot}%{_datadir}/speech-dispatcher/conf/modules/* %{buildroot}%{_sysconfdir}/speech-dispatcher/modules
 
 # (tpg) use our config
