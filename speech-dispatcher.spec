@@ -198,10 +198,10 @@ rm -rf %{buildroot}%{_datadir}/%{name}
 install -d -m 0755 %{buildroot}%{_logdir}/%{name}
 
 # remove flite module from the default configuration in speechd.conf
-sed -i -e "210 s:AddModule:#AddModule:g" %{buildroot}%{_sysconfdir}/%{name}/speechd.conf
+#sed -i -e "210 s:AddModule:#AddModule:g" %{buildroot}%{_sysconfdir}/%{name}/speechd.conf
 
 # enable pulseaudio as default with a fallback to alsa
-sed -i -e 's/# AudioOutputMethod "pulse,alsa"/AudioOutputMethod "pulse,alsa"/' %{buildroot}%{_sysconfdir}/speech-dispatcher/speechd.conf
+#sed -i -e 's/# AudioOutputMethod "pulse,alsa"/AudioOutputMethod "pulse,alsa"/' %{buildroot}%{_sysconfdir}/speech-dispatcher/speechd.conf
 
 %find_lang %{name}
 
