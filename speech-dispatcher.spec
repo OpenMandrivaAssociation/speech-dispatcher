@@ -54,7 +54,7 @@ people to work with computer and Internet based on free software.
 
 %files -f %{name}.lang
 %doc AUTHORS NEWS INSTALL
-%doc speech-dispatcher-user-pulse.example
+#doc speech-dispatcher-user-pulse.example
 %{_unitdir}/%{name}d.service
 #{_bindir}/spd-say
 #{_bindir}/spdsend
@@ -84,7 +84,7 @@ Group:		System/Libraries
 This package provides the shared libraries for Speech Dispatcher.
 
 %files -n %{libname}
-%{_libdir}/libspeechd.so.%{major}*
+#{_libdir}/libspeechd.so.%{major}*
 
 %package -n %{devname}
 Summary:	Development files for %{name}
@@ -96,9 +96,9 @@ Provides:	%{name}-devel = %{EVRD}
 This package contains development files for %{name}.
 
 %files -n %{devname}
-%{_includedir}/*
-%{_libdir}/lib*.so
-%{_libdir}/pkgconfig/%{name}.pc
+#{_includedir}/*
+#{_libdir}/lib*.so
+#{_libdir}/pkgconfig/%{name}.pc
 
 %package -n python-%{sname}
 Summary:	A Python library for communication with Speech Dispatcher
@@ -111,8 +111,8 @@ This package provides a Python library for communication
 with Speech Dispatcher.
 
 %files -n python-%{sname}
-%{_bindir}/spd-conf
-%{python_sitearch}/speechd*
+#{_bindir}/spd-conf
+#{python_sitearch}/speechd*
 
 %prep
 %autosetup -p1
