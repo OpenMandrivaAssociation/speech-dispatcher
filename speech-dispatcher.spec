@@ -177,11 +177,11 @@ find %{buildroot} -name '*.la' -delete
 mkdir -p %{buildroot}%{_sysconfdir}/speech-dispatcher/clients
 mkdir -p %{buildroot}%{_sysconfdir}/speech-dispatcher/modules
 #mv %{buildroot}%{_datadir}/speech-dispatcher/conf/clients/* %{buildroot}%{_sysconfdir}/speech-dispatcher/clients
-mv %{buildroot}%{_datadir}/speech-dispatcher/conf/modules/* %{buildroot}%{_sysconfdir}/speech-dispatcher/modules
+#mv %{buildroot}%{_datadir}/speech-dispatcher/conf/modules/* %{buildroot}%{_sysconfdir}/speech-dispatcher/modules
 
 # (tpg) use our config
-mkdir -p %{buildroot}%{_sysconfdir}/speech-dispatcher/conf
-cp %{SOURCE4} %{buildroot}%{_sysconfdir}/speech-dispatcher/conf/speechd.conf
+#mkdir -p %{buildroot}%{_sysconfdir}/speech-dispatcher/conf
+#cp %{SOURCE4} %{buildroot}%{_sysconfdir}/speech-dispatcher/conf/speechd.conf
 
 # remove duplicates with /etc conf files
 rm -rf %{buildroot}%{_datadir}/%{name}
@@ -192,7 +192,7 @@ chmod +x %{buildroot}%{python_sitearch}/speechd/_test.py
 install -Dm 0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
 
 # install the /etc/default configuration file
-install -Dm 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/default/speech-dispatcherd
+#install -Dm 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/default/speech-dispatcherd
 
 # create the needed directory for logs
 install -d -m 0755 %{buildroot}%{_logdir}/%{name}
