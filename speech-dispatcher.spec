@@ -9,7 +9,7 @@
 %bcond_without pulse
 %bcond_with nas
 %bcond_without espeak
-%bcond_with libao
+%bcond_without libao
 %bcond_with voxin
 
 Summary:	Speech Dispatcher provides a device independent layer for speech synthesis
@@ -22,7 +22,6 @@ Url:		https://www.freebsoft.org/speechd
 Source0:	https://github.com/brailcom/speechd/releases/download/%{version}/%{name}-%{version}.tar.gz
 Source1:	http://www.freebsoft.org/pub/projects/sound-icons/sound-icons-0.1.tar.gz
 ##Patch0:		0001-Remove-pyxdg-dependency.patch
-Patch0:		missing-include.patch
 
 BuildRequires:	texinfo
 BuildRequires:	intltool
@@ -120,9 +119,9 @@ with Speech Dispatcher.
 tar xf %{SOURCE1}
 
 %build
-export CC=gcc
-export CXX=g++
-%configure \
+#export CC=gcc
+#export CXX=g++
+LDFLAGS="-Wl,--undefined=MSG" ./configure \
 	--disable-static \
 	--without-oss \
 	--with-kali=no \
