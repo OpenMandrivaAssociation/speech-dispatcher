@@ -34,6 +34,8 @@ BuildRequires:	pkgconfig(glib-2.0)
 BuildRequires:	pkgconfig(dotconf)
 BuildRequires:	pkgconfig(libsystemd)
 BuildRequires:	pkgconfig(python3)
+BuildRequires:	pkgconfig(libpipewire-0.3)
+BuildRequires:	help2man
 %if %{with alsa}
 BuildRequires:	pkgconfig(alsa)
 %endif
