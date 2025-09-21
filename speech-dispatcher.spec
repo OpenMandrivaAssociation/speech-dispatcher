@@ -1,4 +1,5 @@
-%define _disable_lto 1
+# Allow plugins to reference symbols defined in the server
+%define _disable_ld_no_undefined 1
 
 %define sname speechd
 %define major 2
@@ -9,7 +10,7 @@
 %bcond_without pulse
 %bcond_with nas
 %bcond_without espeak
-%bcond_with libao
+%bcond_without libao
 %bcond_with voxin
 
 Summary:	Speech Dispatcher provides a device independent layer for speech synthesis
@@ -21,8 +22,10 @@ License:	GPLv2
 Url:		https://www.freebsoft.org/speechd
 Source0:	https://github.com/brailcom/speechd/releases/download/%{version}/%{name}-%{version}.tar.gz
 Source1:	http://www.freebsoft.org/pub/projects/sound-icons/sound-icons-0.1.tar.gz
+Source2:	speech-dispatcher.logrotate
+Source3:	speech-dispatcherd.default
+Source4:	speech-dispatcher-user-pulse.example
 ##Patch0:		0001-Remove-pyxdg-dependency.patch
-Patch0:		missing-include.patch
 
 BuildRequires:	texinfo
 BuildRequires:	intltool
@@ -55,7 +58,6 @@ people to work with computer and Internet based on free software.
 
 %files -f %{name}.lang
 %doc AUTHORS NEWS INSTALL
-%doc speech-dispatcher-user-pulse.example
 %{_unitdir}/%{name}d.service
 %{_bindir}/spd-say
 %{_bindir}/spdsend
@@ -76,6 +78,11 @@ people to work with computer and Internet based on free software.
 %{_datadir}/sounds/%{name}
 %{_infodir}/*
 %{_logdir}/%{name}
+%{_prefix}/lib/systemd/user/speech-dispatcher.service
+%{_prefix}/lib/systemd/user/speech-dispatcher.socket
+%{_mandir}/man1/spd-conf.1*
+%{_mandir}/man1/spd-say.1*
+%{_mandir}/man1/speech-dispatcher.1*
 
 %package -n %{libname}
 Summary:	Shared libraries for %{name}
@@ -86,6 +93,7 @@ This package provides the shared libraries for Speech Dispatcher.
 
 %files -n %{libname}
 %{_libdir}/libspeechd.so.%{major}*
+%{_libdir}/libspeechd_module.so.0*
 
 %package -n %{devname}
 Summary:	Development files for %{name}
@@ -116,12 +124,10 @@ with Speech Dispatcher.
 %{python_sitearch}/speechd*
 
 %prep
-%autosetup -p1
-tar xf %{SOURCE1}
+%autosetup -p1 -a1
+#tar xf %{SOURCE1}
 
 %build
-export CC=gcc
-export CXX=g++
 %configure \
 	--disable-static \
 	--without-oss \
@@ -205,10 +211,3 @@ sed -i -e "210 s:AddModule:#AddModule:g" %{buildroot}%{_sysconfdir}/%{name}/spee
 sed -i -e 's/# AudioOutputMethod "pulse,alsa"/AudioOutputMethod "pulse,alsa"/' %{buildroot}%{_sysconfdir}/speech-dispatcher/speechd.conf
 
 %find_lang %{name}
-
-%post 
-%systemd_post speech-dispatcherd.service
-%postun
-%systemd_postun_with_restart speech-dispatcherd.service
-%preun
-%systemd_preun speech-dispatcherd.service
