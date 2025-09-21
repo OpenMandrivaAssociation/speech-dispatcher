@@ -12,6 +12,9 @@
 %bcond_without espeak
 %bcond_without libao
 %bcond_with voxin
+# help2man needs to run the binaries -- so it by definition
+# won't work when crosscompiling (or bumping a soname)
+%bcond_with man
 
 Summary:	Speech Dispatcher provides a device independent layer for speech synthesis
 Name:		speech-dispatcher
@@ -35,7 +38,9 @@ BuildRequires:	pkgconfig(dotconf)
 BuildRequires:	pkgconfig(libsystemd)
 BuildRequires:	pkgconfig(python3)
 BuildRequires:	pkgconfig(libpipewire-0.3)
+%if %{with man}
 BuildRequires:	help2man
+%endif
 %if %{with alsa}
 BuildRequires:	pkgconfig(alsa)
 %endif
@@ -82,9 +87,11 @@ people to work with computer and Internet based on free software.
 %{_logdir}/%{name}
 %{_prefix}/lib/systemd/user/speech-dispatcher.service
 %{_prefix}/lib/systemd/user/speech-dispatcher.socket
+%if %{with man}
 %{_mandir}/man1/spd-conf.1*
 %{_mandir}/man1/spd-say.1*
 %{_mandir}/man1/speech-dispatcher.1*
+%endif
 
 %package -n %{libname}
 Summary:	Shared libraries for %{name}
