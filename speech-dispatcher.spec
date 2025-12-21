@@ -30,6 +30,10 @@ Source3:	speech-dispatcherd.default
 Source4:	speech-dispatcher-user-pulse.example
 ##Patch0:		0001-Remove-pyxdg-dependency.patch
 
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
 BuildRequires:	make
 BuildRequires:	texinfo
 BuildRequires:	intltool
