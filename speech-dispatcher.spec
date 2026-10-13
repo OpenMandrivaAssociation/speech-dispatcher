@@ -32,12 +32,11 @@ Source4:	speech-dispatcher-user-pulse.example
 
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	libtool-base
 BuildRequires:	slibtool
+BuildRequires:	pkgconfig(sltdl)
 BuildRequires:	make
 BuildRequires:	texinfo
 BuildRequires:	intltool
-BuildRequires:	libtool-devel
 BuildRequires:	pkgconfig(glib-2.0)
 BuildRequires:	pkgconfig(dotconf)
 BuildRequires:	pkgconfig(libsystemd)
